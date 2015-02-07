@@ -107,7 +107,7 @@ exports.readAndParseHTML = function(timeout) {
                         $(tr).find('td').each(function(index, value) {
                             var img = $(value).find('a').attr('href');
                             if(img != undefined ){
-                                obj['report'] = options.server +'/'+ img;
+                                obj['report'] = options.server + '/' + img;
                             }
                             if (index < 7)
                                 obj[eventProperties[index]] = $(value).text();
