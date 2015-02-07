@@ -1,0 +1,23 @@
+{
+  "name": "gaea",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "d3": "^3.5.3",
+    "express": "^4.11.2",
+    "jsdom": "3.1.0",
+    "libxmljs": "0.13.0",
+    "moment": "2.9.0",
+    "q": "1.1.2",
+    "request": "^2.53.0"
+  }
+}
