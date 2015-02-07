@@ -13,7 +13,8 @@ var post_data = {
 };
 
 var options = {
-    host: 'http://www.funvisis.gob.ve/sis_reciente.php',
+    server: "http://www.funvisis.gob.ve",
+    recent_events: '/sis_reciente.php'
 };
 
 function isEmptyObject(obj) {
@@ -56,7 +57,7 @@ exports.readAndParseHTML = function(timeout) {
 
     var _r = Q.defer();
 
-    request.post(options.host, {
+    request.post(options.server + options.recent_events, {
         form: post_data
     }, function(error, response, body) {
 
@@ -104,6 +105,10 @@ exports.readAndParseHTML = function(timeout) {
                     $(tbody).find("tr").each(function(index, tr) {
                         var obj = Object.create(null);
                         $(tr).find('td').each(function(index, value) {
+                            var img = $(value).find('a').attr('href');
+                            if(img != undefined ){
+                                obj['report'] = options.server +'/'+ img;
+                            }
                             if (index < 7)
                                 obj[eventProperties[index]] = $(value).text();
                         });
