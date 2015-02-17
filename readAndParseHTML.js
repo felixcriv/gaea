@@ -33,7 +33,7 @@ function isBetween(x,a,b){
     return x>=a && x<=b;
 }
 
-//Adapted code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
+//Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
 function getEventColor(data){
 
     var colorScale = d3.scale.linear();
