@@ -1,6 +1,6 @@
 # gaea
 
-HTML parser for last earthquake events from funvisis.gob.ve
+HTML parser for last (24h) earthquake events from funvisis.gob.ve
 
 #Simple usage:
 
