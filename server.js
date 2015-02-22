@@ -24,6 +24,7 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Credentials', false);
 
     res.setHeader('Accept-Encoding', 'Vary'); 
+    
 
     // Pass to next layer of middleware
     next();
