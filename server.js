@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', false);
 
-    res.setHeader('Accept-Encoding', 'gzip'); 
+    res.setHeader('Accept-Encoding', 'gzip,deflate'); 
 
     // Pass to next layer of middleware
     next();
