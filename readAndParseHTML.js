@@ -24,13 +24,9 @@ function isEmptyObject(obj) {
 function isActualEvent(obj){
 
     var timeDiff =  moment().diff(moment(obj.fecha, "DD-MM-YYYY"), 'days');
-
+    //we only take events for the past 24 hours 
     return (timeDiff == 0 || timeDiff <=1) ? true : false; 
 
-}
-
-function isBetween(x,a,b){
-    return x>=a && x<=b;
 }
 
 //Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
@@ -72,11 +68,8 @@ exports.readAndParseHTML = function(timeout) {
             var e = Object.create(null);
 
             var events = [];
-
             e.events = events;
-            // e.minMag = minMag;
-            // e.maxMag = maxMag;
-
+    
             jsdom.env(_derivateData.text(), ["http://code.jquery.com/jquery.js"],
                 function(errors, window) {
                     var $ = window.$;
