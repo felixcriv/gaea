@@ -70,7 +70,7 @@ exports.readAndParseHTML = function(timeout) {
             var events = [];
             e.events = events;
     
-            jsdom.env(_derivateData.text(), ["http://code.jquery.com/jquery.js"],
+            jsdom.env(_derivateData.text(), ["https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"],
                 function(errors, window) {
                     var $ = window.$;
                     //getting the properties from the head
