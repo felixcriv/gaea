@@ -5,7 +5,8 @@ var Q = require('q'),
     jsdom = require("jsdom"),
     libxmljs = require('libxmljs'),
     moment = require('moment'),
-    d3 = require('d3');
+    d3 = require('d3'),
+    days = 1;
 
 var post_data = {
     "xjxfun": "actualizar",
@@ -24,8 +25,8 @@ function isEmptyObject(obj) {
 function isActualEvent(obj){
 
     var timeDiff =  moment().diff(moment(obj.fecha, "DD-MM-YYYY"), 'days');
-    //we only take events for the past 24 hours 
-    return (timeDiff == 0 || timeDiff <=1) ? true : false; 
+    //we only take events for the past n days 
+    return (timeDiff == 0 || timeDiff <=days) ? true : false; 
 
 }
 
@@ -47,9 +48,10 @@ function getEventColor(data){
     }
 };
 
-exports.readAndParseHTML = function(timeout) {
+exports.readAndParseHTML = function(d, timeout) {
 
     timeout = timeout || 5000;
+    days = d;
 
     var _r = Q.defer();
 

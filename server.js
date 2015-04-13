@@ -28,15 +28,18 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/events', function(req, res) {
+app.get('/events/:days', function(req, res) {
 
-    r.readAndParseHTML().then(
+    var days = req.params.days || 1;
+    
+
+    r.readAndParseHTML(days).then(
         function(data) {
             res.json(data);
         },
         function(error) {
             res.send(error);
         });
-}).listen(app.get('port'));
+});
 
-app.use('/', express.static(__dirname));
+app.use('/', express.static(__dirname)).listen(app.get('port'));
