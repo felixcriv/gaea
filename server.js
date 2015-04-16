@@ -13,7 +13,7 @@ app.set('port', (process.env.PORT || 5000));
 // Add headers
 app.use(function(req, res, next) {
 
-    res.setHeader({
+    res.set({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
         'Vary': 'Accept-Encoding',
