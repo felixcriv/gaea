@@ -12,6 +12,7 @@
   "author": "Felix Guerrero <felixcriv@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.4.3",
     "d3": "3.5.3",
     "express": "4.11.2",
     "jsdom": "3.1.0",
