@@ -5,8 +5,8 @@ var express = require('express');
 
 var app = express();
 
-//1 days caching
-var cacheTime = 86400000 * 1;
+//3 minutes caching
+var cacheTime = 180;
 
 app.set('port', (process.env.PORT || 5000));
 
