@@ -4,8 +4,8 @@ var Q = require('q'),
     request = require('request'),
     jsdom = require("jsdom"),
     libxmljs = require('libxmljs'),
-    moment = require('moment'),
     d3 = require('d3'),
+    tools = require('./tools'),
     days = 1;
 
 var post_data = {
@@ -18,17 +18,7 @@ var options = {
     recent_events: '/sis_reciente.php'
 };
 
-function isEmptyObject(obj) {
-    return !Object.keys(obj).length;
-}
 
-function isActualEvent(obj) {
-
-    var timeDiff = moment().diff(moment(obj.fecha, "DD-MM-YYYY"), 'days');
-    //we only take events for the past n days 
-    return (timeDiff == 0 || timeDiff <= days) ? true : false;
-
-}
 
 //Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
 function getEventColor(data) {
@@ -112,7 +102,7 @@ exports.readAndParseHTML = function(d, timeout) {
                                     obj[eventProperties[index]] = $(value).text();
                             });
 
-                            if (!isEmptyObject(obj) && isActualEvent(obj))
+                            if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, days))
                                 events.push(obj);
                         });
 
