@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Felix Guerrero <felixcriv@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "d3": "3.5.3",
