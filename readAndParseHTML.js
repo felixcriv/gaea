@@ -4,39 +4,20 @@ var Q = require('q'),
     request = require('request'),
     jsdom = require("jsdom"),
     libxmljs = require('libxmljs'),
-    d3 = require('d3'),
     tools = require('./tools'),
+    colors = require('./colors'),
     days = 1;
 
-var post_data = {
-    "xjxfun": "actualizar",
-    "xjxr": new Date().getTime()
-};
 
 var options = {
     server: "http://www.funvisis.gob.ve",
-    recent_events: '/sis_reciente.php'
-};
-
-
-
-//Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
-function getEventColor(data) {
-
-    var colorScale = d3.scale.linear();
-    colorScale.domain([0, 50]);
-    colorScale.range([0, 100]); // green to red (deepest)
-    colorScale.clamp(true);
-
-    for (var i = 0; i < data.events.length; i++) {
-
-        var d = data.events[i].prof;
-
-        var hueValue = colorScale(d);
-        var color = d3.hsl(hueValue, 1, 0.5);
-        data.events[i].color = color.toString();
+    recent_events: '/sis_reciente.php',
+    post_data: {
+        "xjxfun": "actualizar",
+        "xjxr": new Date().getTime()
     }
 };
+
 
 exports.readAndParseHTML = function(d, timeout) {
 
@@ -46,7 +27,7 @@ exports.readAndParseHTML = function(d, timeout) {
     var _r = Q.defer();
 
     request.post(options.server + options.recent_events, {
-        form: post_data
+        form: options.post_data
     }, function(error, response, body) {
 
         if (!error && response.statusCode == 200) {
@@ -72,7 +53,7 @@ exports.readAndParseHTML = function(d, timeout) {
                         var $ = window.$;
                         //getting the properties from the head
                         var thead = $("thead tr");
-                        //remove the last five rows (junk)
+                        //remove the last five rows (it is just junk)
                         $("tbody tr").slice(-5).remove();
 
                         var tbody = $("tbody");
@@ -106,8 +87,7 @@ exports.readAndParseHTML = function(d, timeout) {
                                 events.push(obj);
                         });
 
-                        getEventColor(e);
-                        _r.resolve(e);
+                        _r.resolve(colors.getEventColor(e));
                     }
                 });
         } else {
