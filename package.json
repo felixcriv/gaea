@@ -1,7 +1,7 @@
 {
   "name": "gaea",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "XML to JSON parser for sismic events from funvisis.gob.ve data",
   "main": "server.js",
   "engines": {
     "node": "0.10.x"
@@ -12,12 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "d3": "^3.5.3",
-    "express": "^4.11.2",
+    "d3": "3.5.3",
+    "express": "4.11.2",
     "jsdom": "3.1.0",
     "libxmljs": "0.13.0",
     "moment": "2.9.0",
     "q": "1.1.2",
-    "request": "^2.53.0"
+    "request": "2.53.0"
   }
 }
