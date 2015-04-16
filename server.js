@@ -16,8 +16,9 @@ app.use(function(req, res, next) {
     res.set({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
+        'Cache-Control': 'public, max-age=' + cacheTime,
+        'Content-length': res.length,
         'Vary': 'Accept-Encoding',
-        'Cache-Control': 'public, max-age=' + cacheTime
     });
 
     // Pass to next layer of middleware
