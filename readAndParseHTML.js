@@ -22,28 +22,28 @@ function isEmptyObject(obj) {
     return !Object.keys(obj).length;
 }
 
-function isActualEvent(obj){
+function isActualEvent(obj) {
 
-    var timeDiff =  moment().diff(moment(obj.fecha, "DD-MM-YYYY"), 'days');
+    var timeDiff = moment().diff(moment(obj.fecha, "DD-MM-YYYY"), 'days');
     //we only take events for the past n days 
-    return (timeDiff == 0 || timeDiff <=days) ? true : false; 
+    return (timeDiff == 0 || timeDiff <= days) ? true : false;
 
 }
 
 //Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
-function getEventColor(data){
+function getEventColor(data) {
 
     var colorScale = d3.scale.linear();
-    colorScale.domain([0,50]);
-    colorScale.range([0,100]); // green to red (deepest)
+    colorScale.domain([0, 50]);
+    colorScale.range([0, 100]); // green to red (deepest)
     colorScale.clamp(true);
 
-    for(var i = 0; i < data.events.length; i++){
+    for (var i = 0; i < data.events.length; i++) {
 
         var d = data.events[i].prof;
-        
+
         var hueValue = colorScale(d);
-        var color = d3.hsl(hueValue,1,0.5);
+        var color = d3.hsl(hueValue, 1, 0.5);
         data.events[i].color = color.toString();
     }
 };
@@ -71,50 +71,54 @@ exports.readAndParseHTML = function(d, timeout) {
 
             var events = [];
             e.events = events;
-    
+
             jsdom.env(_derivateData.text(), ["https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"],
                 function(errors, window) {
-                    var $ = window.$;
-                    //getting the properties from the head
-                    var thead = $("thead tr");
-                    //remove the last five rows (junk)
-                    $("tbody tr").slice(-5).remove();
 
-                    var tbody = $("tbody");
+                    if (errors) {
+                        _r.reject(errors);
+                    } else {
 
-                    //getting events properties
-                    $("thead>tr>th").each(function(index, tr) {
-                        if (index < 7)
-                            evnt[encodeURI(($(tr)[0].innerHTML).split('<br>')[0]).replace(/%C3%B3/g, 'o').replace(/\./g,"").toLowerCase()] = 0;
-                    });
+                        var $ = window.$;
+                        //getting the properties from the head
+                        var thead = $("thead tr");
+                        //remove the last five rows (junk)
+                        $("tbody tr").slice(-5).remove();
 
+                        var tbody = $("tbody");
 
-                    //mapping the event properties to an array
-                    //so we can map our events object later
-                    var eventProperties = [];
-
-                    for (var k in evnt) {
-                        eventProperties.push(k);
-                    }
-                    //we look into the tbody for properties
-                    $(tbody).find("tr").each(function(index, tr) {
-                        var obj = Object.create(null);
-                        $(tr).find('td').each(function(index, value) {
-                            var img = $(value).find('a').attr('href');
-                            if(img != undefined ){
-                                obj['report'] = options.server + '/' + img;
-                            }
+                        //getting events properties
+                        $("thead>tr>th").each(function(index, tr) {
                             if (index < 7)
-                                obj[eventProperties[index]] = $(value).text();
+                                evnt[encodeURI(($(tr)[0].innerHTML).split('<br>')[0]).replace(/%C3%B3/g, 'o').replace(/\./g, "").toLowerCase()] = 0;
                         });
 
-                        if (!isEmptyObject(obj) && isActualEvent(obj))
-                            events.push(obj);
-                    });
+                        //mapping the event properties to an array
+                        //so we can map our events object later
+                        var eventProperties = [];
 
-                    getEventColor(e);
+                        for (var k in evnt) {
+                            eventProperties.push(k);
+                        }
+                        //we look into the tbody for properties
+                        $(tbody).find("tr").each(function(index, tr) {
+                            var obj = Object.create(null);
+                            $(tr).find('td').each(function(index, value) {
+                                var img = $(value).find('a').attr('href');
+                                if (img != undefined) {
+                                    obj['report'] = options.server + '/' + img;
+                                }
+                                if (index < 7)
+                                    obj[eventProperties[index]] = $(value).text();
+                            });
 
-                    _r.resolve(e);
+                            if (!isEmptyObject(obj) && isActualEvent(obj))
+                                events.push(obj);
+                        });
+
+                        getEventColor(e);
+                        _r.resolve(e);
+                    }
                 });
         } else {
             _r.reject(error)
