@@ -5,18 +5,20 @@ var express = require('express');
 
 var app = express();
 
+//1 days caching
+var cacheTime = 86400000 * 1;
+
 app.set('port', (process.env.PORT || 5000));
 
 // Add headers
 app.use(function(req, res, next) {
 
-    //Connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-
-    res.setHeader('Vary', 'Accept-Encoding'); 
+    res.setHeader({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Vary': 'Accept-Encoding',
+        'Cache-Control': 'public, max-age=' + cacheTime
+    });
 
     // Pass to next layer of middleware
     next();
@@ -31,7 +33,7 @@ app.get('/', function(req, res) {
 app.get('/events/:days', function(req, res) {
 
     var days = req.params.days || 1;
-    
+
 
     r.readAndParseHTML(days).then(
         function(data) {
