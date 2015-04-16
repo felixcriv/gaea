@@ -1,6 +1,6 @@
 'use strict';
 
-var r = require('./readAndParseHTML');
+var parser = require('./parser');
 var express = require('express');
 
 var app = express();
@@ -35,8 +35,7 @@ app.get('/events/:days', function(req, res) {
 
     var days = req.params.days || 1;
 
-
-    r.readAndParseHTML(days).then(
+    parser.getEvents(days).then(
         function(data) {
             res.json(data);
         },
