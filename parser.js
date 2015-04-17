@@ -1,16 +1,16 @@
 'use strict';
 
 //Parse HTML data from funvisis.gob.ve/sis_reciente.php to a JSON object.
-//Hours are on Venezuelan Time (VET GMT -4:30)
-//This script can fail if the website changes its HTML layout. We hope 
-//to have a REST API for this service in the future.
+//Hours are on 24H VET (VET GMT -4:30)
+//NOTE: This script can fail if the website changes its HTML layout.
+//At this moment there is not other suitable way to get this data.
 
 var Q = require('q'),
     request = require('request'),
     jsdom = require("jsdom"),
     tools = require('./tools'),
     lang = require('./lang'),
-    moment = require('moment'),
+    moment = require('moment-timezone'),
     colors = require('./colors');
 
 
@@ -105,7 +105,14 @@ function parseHTML(body, d, timeout) {
                             obj['report'] = options.server + '/' + img;
                         }
                         if (index < 7) {
-                            obj[evntProp[index]] = $(value).text();
+                            if(evntProp[index] === 'fecha'){
+                                obj[evntProp[index]] =  moment($(value).text(), 'DD-MM-YYYY').format('MM/DD/YYYY');
+                            }else if(evntProp[index] === 'hora'){
+                                obj[evntProp[index]] = moment($(value).text(), 'HH:mm').format('hh:mm A');
+                            }
+                            else{
+                                obj[evntProp[index]] = $(value).text();
+                            }   
                         }
                     });
 
