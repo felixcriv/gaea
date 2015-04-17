@@ -4,8 +4,8 @@ var Q = require('q'),
     request = require('request'),
     jsdom = require("jsdom"),
     tools = require('./tools'),
-    colors = require('./colors'),
-    days = 1;
+    lang = require('./lang'),
+    colors = require('./colors');
 
 
 var options = {
@@ -31,10 +31,8 @@ function getHTML(opt) {
 function parseHTML(body, d, timeout) {
 
     timeout = timeout || 5000;
-    days = d;
 
     var _r = Q.defer();
-
     var evnt = Object.create(null);
     var e = Object.create(null);
 
@@ -77,12 +75,18 @@ function parseHTML(body, d, timeout) {
                         if (img != undefined) {
                             obj['report'] = options.server + '/' + img;
                         }
-                        if (index < 7)
+                        if (index < 7){
                             obj[eventProperties[index]] = $(value).text();
+                        }
                     });
 
-                    if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, days))
+                    if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, d)){
+                        var l = obj.localizacion.split(" ");
+                        obj.magnitud = 'M'+obj.magnitud;
+                        obj.localizacion = l[0] + l[1]+ " " + lang.translate('es', l[3]) + " of "  + l[5];
                         events.push(obj);
+                    }
+                        
                 });
                 
                 _r.resolve(colors.getEventColor(e));
@@ -99,6 +103,6 @@ exports.getEvents = function(d, timeout) {
     return getHTML(options).then(function(response) {
         return response[0].body;
     }).then(function(body) {
-        return parseHTML(body, d, timeout);//getEvents(body, 5000);
+        return parseHTML(body, d, timeout);
     });
 };
