@@ -83,7 +83,13 @@ function parseHTML(body, d, timeout) {
                     if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, d)){
                         var l = obj.localizacion.split(" ");
                         obj.magnitud = 'M'+obj.magnitud;
-                        obj.localizacion = l[0] + l[1]+ " " + lang.translate('es', l[3]) + " of "  + l[5];
+                        
+                        if(l.length >6){
+                            obj.localizacion = l[0] + l[1]+ " " + lang.translate('es', l[3]) + " of "  + l[5] + " " + l[6];
+                        }else{
+                            obj.localizacion = l[0] + l[1]+ " " + lang.translate('es', l[3]) + " of "  + l[5];
+                        }
+                        
                         events.push(obj);
                     }
                         
