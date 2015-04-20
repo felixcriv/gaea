@@ -36,5 +36,5 @@ var i18n = {
 }
 
 exports.translate = function(lang, str) {
-    return i18n[lang]['coordinates'][str] + " " + i18n[lang]['de'];
+    return i18n[lang]['coordinates'][str] + " " + i18n[lang]['de'] + " ";
 }
