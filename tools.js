@@ -8,8 +8,8 @@ exports.isEmptyObject = function(obj) {
 
 exports.isActualEvent = function(obj, days) {
 	//Events are generated on VET timezone
-    var timeDiff = moment().tz('America/Caracas').diff(moment(obj.fecha + ' ' + obj.hora, "DD-MM-YYYY HH:mm"), 'days');
-    //we only take events for the past n days 
-    return (timeDiff == 0 || timeDiff <= days) ? true : false;
+    var timeDiff = moment().tz('America/Caracas').diff(moment(obj.fecha + ' ' + obj.hora, "MM-DD-YYYY hh:mm A"), 'days');
+    //we only take events for the past n days
+    return (timeDiff == 0 || timeDiff < days) ? true : false;
 
 }
