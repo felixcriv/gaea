@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/events/:days', function(req, res) {
+app.get('/events/:days?', function(req, res) {
 
      res.set({
         'Access-Control-Allow-Origin': '*',
@@ -29,9 +29,16 @@ app.get('/events/:days', function(req, res) {
         'Content-length': res.length
     });
 
-    var days = req.params.days || 1;
 
-    parser.getEvents(days).then(
+    var config = {
+        timeout: 5000,
+        daysToRequest : req.params.days || 1,
+        language: req.query.l
+    };
+
+    console.log(config);
+
+    parser.getEvents(config).then(
         function(data) {
             res.json(data);
         },

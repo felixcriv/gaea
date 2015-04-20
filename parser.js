@@ -64,23 +64,23 @@ var e = (function() {
     }
 
     //Returns events for event < currentDate
-    function filterEvents(eventsObj, d) {
+    function filterEvents(eventsObj, cfg) {
 
         var e = Object.create(null);
 
         var events = [];
 
         eventsObj.forEach(function(obj) {
-            if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, d)) {
+            if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, cfg.daysToRequest)) {
 
                 var l = obj.localizacion.split(" ");
 
                 obj.magnitud = 'M' + obj.magnitud;
 
                 if (l.length > 6) {
-                    obj.localizacion = l[0] + l[1] + " " + lang.translate('es', l[3]) + " of " + l[5] + " " + l[6];
+                    obj.localizacion = l[0] + l[1] + " " + lang.translate(cfg.language, l[3]) + l[5] + " " + l[6];
                 } else {
-                    obj.localizacion = l[0] + l[1] + " " + lang.translate('es', l[3]) + " of " + l[5];
+                    obj.localizacion = l[0] + l[1] + " " + lang.translate(cfg.language, l[3]) + l[5];
                 }
 
                 events.push(obj);
@@ -167,13 +167,13 @@ var e = (function() {
 
 
 
-exports.getEvents = function(daysToRequest, timeout) {
+exports.getEvents = function(cfg) {
 
     return e.get().then(function(response) {
         return response[0].body;
     }).then(function(body) {
-        return e.parse(body, timeout);
+        return e.parse(body, cfg.timeout);
     }).then(function(data) {
-        return e.filter(data, daysToRequest);
+        return e.filter(data, cfg);
     }).then(e.color);
 };
