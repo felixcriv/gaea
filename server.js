@@ -36,8 +36,6 @@ app.get('/events/:days?', function(req, res) {
         language: req.query.l
     };
 
-    console.log(config);
-
     parser.getEvents(config).then(
         function(data) {
             res.json(data);

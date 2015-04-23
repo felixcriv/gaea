@@ -15,10 +15,22 @@ var i18n = {
             "noroeste": "North West"
         },
 
-        "de": "of"
+        "data": {
+            "fecha": "date",
+            "hora": "hour",
+            "latitud": "latitude",
+            "longitud": "longitude",
+            "prof": "depth",
+            "magnitud": "magnitude",
+            "report": "report",
+            "localizacion": "place",
+            "color": "color",
+            "de": "of"
+        }
+
     },
 
-    "it":{
+    "it": {
         "coordinates": {
             "norte": "Nord",
             "sur": "Sud",
@@ -30,11 +42,27 @@ var i18n = {
             "noroeste": "Nord Ovest"
         },
 
-        "de": "di"
+        "data": {
+            "fecha": "data",
+            "hora": "ora",
+            "latitud": "latitudine",
+            "longitud": "longitudine",
+            "prof": "profondita",
+            "magnitud": "magnitudine",
+            "report": "relazione",
+            "localizacion": "luogo",
+            "color": "colore",
+            "de": "di"
+        }
     }
 
-}
+};
 
-exports.translate = function(lang, str) {
-    return i18n[lang]['coordinates'][str] + " " + i18n[lang]['de'] + " ";
+
+exports.translate = function(keys) {
+    var obj = Object.create(i18n);
+    for (var i in keys[0]) {
+        obj = obj[keys[0][i]];
+    }
+    return obj
 }

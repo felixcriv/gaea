@@ -63,6 +63,11 @@ var e = (function() {
         return eventProperties;
     }
 
+    function i18n() {
+        return lang.translate([].slice.call(arguments));
+
+    }
+
     //Returns events for event < currentDate
     function filterEvents(eventsObj, cfg) {
 
@@ -70,37 +75,50 @@ var e = (function() {
 
         var events = [];
 
+
         eventsObj.forEach(function(obj) {
-            if (!tools.isEmptyObject(obj) && tools.isActualEvent(obj, cfg.daysToRequest)) {
 
-                var l = obj.localizacion.split(" ");
+            var date = obj[i18n([cfg.language, 'data', "fecha"])];
+            var hour = obj[i18n([cfg.language, 'data', "hora"])];
+            var location = i18n([cfg.language, 'data', "localizacion"]);
+            var l = obj[location].split(" ");
 
-                obj.magnitud = 'M' + obj.magnitud;
+
+            if (!tools.isEmptyObject(obj) && tools.isActualEvent(date, hour, cfg.daysToRequest)) {
+
+                var sentence_preposition = i18n([cfg.language, "data", "de"]);
+                var place = i18n([cfg.language, 'coordinates', l[3]]);
+                var magnitude = i18n([cfg.language, 'data', "magnitud"]);
+
+                obj[magnitude] = 'M' + obj[magnitude];
 
                 if (l.length > 6) {
-                    obj.localizacion = l[0] + l[1] + " " + lang.translate(cfg.language, l[3]) + l[5] + " " + l[6];
+                    obj[location] = l[0] + l[1] + " " + place + " " + sentence_preposition + " " + l[5] + " " + l[6];
                 } else {
-                    obj.localizacion = l[0] + l[1] + " " + lang.translate(cfg.language, l[3]) + l[5];
+                    obj[location] = l[0] + l[1] + " " + place + " " + sentence_preposition + " " + l[5];
                 }
 
                 events.push(obj);
             }
-
         });
 
         return e.events = events;
     }
 
     //Returns a color string for the event
-    function applyMagnitudColorForEvents(objEvents) {
-        return colors.getEventsColors(objEvents);
+    function applyMagnitudColorForEvents(objEvents, cfg) {
+        var c = i18n([cfg.language, 'data', "color"]);
+        var m = i18n([cfg.language, 'data', "magnitud"]);
+
+
+        return colors.getEventsColors(objEvents, c, m);
     }
 
     //returns a promise that if it is resolved 
     //populates an object with the event properties/values
-    function parseHTML(body, timeout) {
+    function parseHTML(body, cfg) {
 
-        timeout = timeout || 5000;
+        cfg.timeout = cfg.timeout || 5000;
 
         var _r = Q.defer();
 
@@ -129,16 +147,18 @@ var e = (function() {
                             var img = $(value).find('a').attr('href');
                             //report image
                             if (img != undefined) {
-                                obj['report'] = options.server + '/' + img;
+                                obj[i18n([cfg.language, "data", "report"])] = options.server + '/' + img;
                             }
                             //columns
                             if (index < 7) {
-                                if (evntProp[index] === 'fecha') {
-                                    obj[evntProp[index]] = moment($(value).text(), 'DD-MM-YYYY').format('MM/DD/YYYY');
+                                var prop = evntProp[index];
+
+                                if (prop === 'fecha') {
+                                    obj[i18n([cfg.language, "data", prop])] = moment($(value).text(), 'DD-MM-YYYY').format('MM/DD/YYYY');
                                 } else if (evntProp[index] === 'hora') {
-                                    obj[evntProp[index]] = moment($(value).text(), 'HH:mm').format('hh:mm A');
+                                    obj[i18n([cfg.language, "data", prop])] = moment($(value).text(), 'HH:mm').format('hh:mm A');
                                 } else {
-                                    obj[evntProp[index]] = $(value).text();
+                                    obj[i18n([cfg.language, "data", prop])] = $(value).text();
                                 }
                             }
                         });
@@ -151,7 +171,7 @@ var e = (function() {
                 }
             });
 
-        timeout && setTimeout(_r.reject, timeout);
+        cfg.timeout && setTimeout(_r.reject, cfg.timeout);
         return _r.promise;
     }
 
@@ -172,8 +192,10 @@ exports.getEvents = function(cfg) {
     return e.get().then(function(response) {
         return response[0].body;
     }).then(function(body) {
-        return e.parse(body, cfg.timeout);
+        return e.parse(body, cfg);
     }).then(function(data) {
         return e.filter(data, cfg);
-    }).then(e.color);
+    }).then(function(data) {
+        return e.color(data, cfg)
+    });
 };
