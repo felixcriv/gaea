@@ -64,7 +64,7 @@ var e = (function() {
     }
 
     function i18n() {
-        return lang.translate([].slice.call(arguments));
+        return new lang().i18n([].slice.call(arguments));
 
     }
 
@@ -180,7 +180,8 @@ var e = (function() {
         get: getHTML,
         parse: parseHTML,
         filter: filterEvents,
-        color: applyMagnitudColorForEvents
+        color: applyMagnitudColorForEvents,
+        i18n: i18n
     };
 
 })();
