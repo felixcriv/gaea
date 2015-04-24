@@ -141,17 +141,28 @@ var e = (function() {
                     $("tbody tr").slice(-6).remove();
                     var tbody = $("tbody");
 
+                    
+                    var reportImage;
+                    var imagePlaceholder = 'http://dummyimage.com/300x300/000/fff.png&text=no+report+yet';
+                    var imageUrl;
+                    var img;
+
                     //we look into the second table's tbody>tr for values
                     $(tbody).find("table>tbody>tr").each(function(index, tr) {
                         var obj = Object.create(null);
 
                         $(tr).find('td').each(function(index, value) {
 
-                            var img = $(value).find('a').attr('href');
-                            //report image
-                            if (img != undefined) {
-                                obj[i18n([cfg.language, "data", "report"])] = options.server + '/' + img;
+                            img = $(value).find('a').attr('href');
+                            
+                            reportImage = (options.server + '/' + img);
+
+                            if(img != undefined){
+                                imageUrl = reportImage
                             }
+
+                            obj[i18n([cfg.language, "data", "report"])] = imageUrl || imagePlaceholder;
+                            
                             //columns
                             if (index < 7) {
                                 var prop = evntProp[index];
