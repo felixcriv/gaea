@@ -68,13 +68,22 @@ var e = (function() {
 
     }
 
+    function createPlaceName(place) {
+        var _p = place.slice(0);
+        _p.splice(0, 5);
+        var p = [];
+        _p.forEach(function(d) {
+            p.push(d);
+        });
+
+        return p.join(" ");
+    }
+
     //Returns events for event < currentDate
     function filterEvents(eventsObj, cfg) {
 
         var e = Object.create(null);
-
         var events = [];
-
 
         eventsObj.forEach(function(obj) {
 
@@ -83,7 +92,6 @@ var e = (function() {
             var location = i18n([cfg.language, 'data', "localizacion"]);
             var l = obj[location].split(" ");
 
-
             if (!tools.isEmptyObject(obj) && tools.isActualEvent(date, hour, cfg.daysToRequest)) {
 
                 var sentence_preposition = i18n([cfg.language, "data", "de"]);
@@ -91,12 +99,7 @@ var e = (function() {
                 var magnitude = i18n([cfg.language, 'data', "magnitud"]);
 
                 obj[magnitude] = 'M' + obj[magnitude];
-
-                if (l.length > 6) {
-                    obj[location] = l[0] + l[1] + " " + place + " " + sentence_preposition + " " + l[5] + " " + l[6];
-                } else {
-                    obj[location] = l[0] + l[1] + " " + place + " " + sentence_preposition + " " + l[5];
-                }
+                obj[location] = l[0] + l[1] + " " + place + " " + sentence_preposition + " " + createPlaceName(l);
 
                 events.push(obj);
             }
