@@ -144,18 +144,19 @@ var e = (function() {
                     
                     var reportImage;
                     var imagePlaceholder = 'http://dummyimage.com/300x300/000/fff.png&text=no+report+yet';
-                    var imageUrl;
+                    
                     var img;
 
                     //we look into the second table's tbody>tr for values
                     $(tbody).find("table>tbody>tr").each(function(index, tr) {
                         var obj = Object.create(null);
-
+                        var imageUrl;
                         $(tr).find('td').each(function(index, value) {
 
                             img = $(value).find('a').attr('href');
                             
                             reportImage = (options.server + '/' + img);
+                            
 
                             if(img != undefined){
                                 imageUrl = reportImage
