@@ -79,6 +79,19 @@ var e = (function() {
         return p.join(" ");
     }
 
+    function calculateTimeDiff(obj, cfg){
+
+        var hour = obj[i18n([cfg.language, "data", "hora"])];
+        var date = obj[i18n([cfg.language, "data", "fecha"])];
+
+        var eventTime = moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A');
+
+        obj[i18n([cfg.language,'data', 'ocurrido'])] = eventTime.startOf('hour').fromNow();
+
+        return obj;
+
+    }
+
     //Returns events for event < currentDate
     function filterEvents(eventsObj, cfg) {
 
@@ -178,7 +191,7 @@ var e = (function() {
                             }
                         });
 
-                        if (!tools.isEmptyObject(obj)) events.push(obj);
+                        if (!tools.isEmptyObject(obj)) events.push(calculateTimeDiff(obj, cfg));
 
                     });
 
