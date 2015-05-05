@@ -31,7 +31,8 @@
                     "report": "report",
                     "localizacion": "place",
                     "color": "color",
-                    "de": "of"
+                    "de": "of",
+                    "ocurrido": "occurred"
                 }
 
             },
@@ -58,7 +59,8 @@
                     "report": "relazione",
                     "localizacion": "luogo",
                     "color": "colore",
-                    "de": "di"
+                    "de": "di",
+                    "ocurrido": "verificato"
                 }
             }
 
