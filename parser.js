@@ -65,8 +65,8 @@ var e = (function() {
 
     function i18n() {
         return new lang().i18n([].slice.call(arguments));
-
     }
+
 
     function createPlaceName(place) {
         var _p = place.slice(0);
@@ -127,7 +127,7 @@ var e = (function() {
         var m = i18n([cfg.language, 'data', "magnitud"]);
 
 
-        return colors.getEventsColors(objEvents, c, m);
+        return new colors().getColorForEvent(objEvents, c, m);
     }
 
     //returns a promise that if it is resolved 
