@@ -15,6 +15,7 @@ var d3 = require('d3');
 
             if(typeof m != 'number')
                 return 'null'
+
             var hueValue = colorScale(m);
             var c = d3.hsl(hueValue, 1, 0.5);
 
@@ -52,7 +53,7 @@ var d3 = require('d3');
 
                 for (var i = 0; i < data.length; i++) {
 
-                    var m = data[i][mag].split('M')[1];;
+                    var m = data[i][mag].split('M')[1] * 1;
 
                     data[i][color] = this.calcHUE(m).toString();
                     data[i]['magScale'] = magScale(m) * 2;
