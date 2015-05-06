@@ -30,10 +30,12 @@ app.get('/events/:days?', function(req, res) {
     });
 
 
+
+
     var config = {
         timeout: 5000,
         daysToRequest : req.params.days || 1,
-        language: req.query.l
+        language: req.query.l || 'en-US'
     };
 
     parser.getEvents(config).then(
