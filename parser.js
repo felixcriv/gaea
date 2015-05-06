@@ -79,15 +79,14 @@ var e = (function() {
         return p.join(" ");
     }
 
-    function calculateTimeDiff(obj, cfg) {
+    function calculateTimeDiff(obj, cfg){
 
         var hour = obj[i18n([cfg.language, "data", "hora"])];
         var date = obj[i18n([cfg.language, "data", "fecha"])];
-        moment.locale(cfg.language);
 
         var eventTime = moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A');
 
-        obj[i18n([cfg.language, 'data', 'ocurrido'])] = eventTime.startOf('hour').fromNow();
+        obj[i18n([cfg.language,'data', 'ocurrido'])] = eventTime.startOf('hour').fromNow();
 
         return obj;
 
@@ -155,10 +154,10 @@ var e = (function() {
                     $("tbody tr").slice(-6).remove();
                     var tbody = $("tbody");
 
-
+                    
                     var reportImage;
                     var imagePlaceholder = 'http://dummyimage.com/300x300/000/fff.png&text=no+report+yet';
-
+                    
                     var img;
 
                     //we look into the second table's tbody>tr for values
@@ -168,16 +167,16 @@ var e = (function() {
                         $(tr).find('td').each(function(index, value) {
 
                             img = $(value).find('a').attr('href');
-
+                            
                             reportImage = (options.server + '/' + img);
+                            
 
-
-                            if (img != undefined) {
+                            if(img != undefined){
                                 imageUrl = reportImage
                             }
 
                             obj[i18n([cfg.language, "data", "report"])] = imageUrl || imagePlaceholder;
-
+                            
                             //columns
                             if (index < 7) {
                                 var prop = evntProp[index];
@@ -218,6 +217,7 @@ var e = (function() {
 
 
 exports.getEvents = function(cfg) {
+
     try {
         if (e.i18n([cfg.language, "data", "report"])) {
             return e.get().then(function(response) {
@@ -230,7 +230,7 @@ exports.getEvents = function(cfg) {
                 return e.color(data, cfg)
             });
         }
-
+ 
     } catch (error) {
         return Q.reject({API_error:"Language not defined"});
     }
