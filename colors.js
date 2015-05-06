@@ -1,117 +1,75 @@
 'use strict';
 
+
 var d3 = require('d3');
 
-// (function() {
+(function() {
 
-//     var Colors = (function() {
+    var Colors = (function() {
 
-//         var Colors = function() {};
+        var colorScale = d3.scale.linear();
 
-//         Colors.prototype.getColorForEvent = function getColorForEvent() {
-//             if (!arguments.length || arguments.length < 2) {
-//                 return null
-//             } else {
-//                 var color = arguments[0];
-//                 var mag = arguments[1];
+        var Colors = function() {};
 
-//                 var colorScale = d3.scale.linear();
-//                 colorScale.domain([0, 50]);
-//                 colorScale.range([0, 100]); // green to red (deepest)
-//                 colorScale.clamp(true);
+        Colors.prototype.calcHUE = function(m) {
 
-//                 // var minMag = d3.min(data, function(d) {
-//                 //     return d[mag].split('M')[1];
-//                 // });
+            if(typeof m != 'number')
+                return 'null'
+            var hueValue = colorScale(m);
+            var c = d3.hsl(hueValue, 1, 0.5);
 
-//                 // var maxMag = d3.max(data, function(d) {
-//                 //     return d[mag].split('M')[1];
-//                 // });
+            return c;
+        };
 
-//                 //magnitude scale for animation or drawing purposes
-//                 var magScale = d3.scale.log();
-//                 magScale.base(10);
-//                 //magScale.domain([minMag, maxMag]);
-//                 magScale.range([1, 30]);
+        Colors.prototype.getColorForEvent = function getColorForEvent() {
+            if (!arguments.length || arguments.length < 3) {
+                return null
+            } else {
+                var data = arguments[0]
+                var color = arguments[1];
+                var mag = arguments[2];
 
-//                 // for (var i = 0; i < data.length; i++) {
+                //Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
 
-//                 //     var m = data[i][mag].split('M')[1];;
+                
+                colorScale.domain([0, 50]);
+                colorScale.range([0, 100]); // green to red (deepest)
+                colorScale.clamp(true);
 
+                var minMag = d3.min(data, function(d) {
+                    return d[mag].split('M')[1];
+                });
 
-//                 //     var hueValue = colorScale(m);
+                var maxMag = d3.max(data, function(d) {
+                    return d[mag].split('M')[1];
+                });
 
-//                 //     var c = d3.hsl(hueValue, 1, 0.5);
+                //magnitude scale for animation or drawing purposes
+                var magScale = d3.scale.log();
+                magScale.base(10);
+                magScale.domain([minMag, maxMag]);
+                magScale.range([1, 30]);
 
-//                 //     data[i][color] = c.toString();
-//                 //     data[i]['magScale'] = magScale(m) * 2;
-//                 // }
+                for (var i = 0; i < data.length; i++) {
 
-//                 return "color";
-//             }
+                    var m = data[i][mag].split('M')[1];;
 
-//         };
+                    data[i][color] = this.calcHUE(m).toString();
+                    data[i]['magScale'] = magScale(m) * 2;
+                }
 
-//         return Colors;
+                return data;
+            }
 
-//     })();
+        };
 
-//     if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-//         module.exports = Colors;
-//     else
-//         window.Colors = Colors;
+        return Colors;
 
-// })();
+    })();
 
-function initColor (){
+    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
+        module.exports = Colors;
+    else
+        window.Colors = Colors;
 
-    var c = 0;
-
-    return function(){
-        c++;
-        console.log(c);
-    }
-}
-
-
-
-//Code from https://github.com/ginaschmalzle/tohoku_eq/blob/master/mainG.js
-exports.getEventsColors = function(data, color, mag) {
-    var c = initColor();
-    
-    var colorScale = d3.scale.linear();
-    colorScale.domain([0, 50]);
-    colorScale.range([0, 100]); // green to red (deepest)
-    colorScale.clamp(true);
-
-    var minMag = d3.min(data, function(d) {
-        return d[mag].split('M')[1];
-        c();
-    });
-
-    var maxMag = d3.max(data, function(d) {
-        return d[mag].split('M')[1];
-    });
-
-
-    //magnitude scale for animation or drawing purposes
-    var magScale = d3.scale.log();
-    magScale.base(10);
-    magScale.domain([minMag, maxMag]);
-    magScale.range([1, 30]);
-
-    for (var i = 0; i < data.length; i++) {
-
-        var m = data[i][mag].split('M')[1];;
-
-
-        var hueValue = colorScale(m);
-
-        var c = d3.hsl(hueValue, 1, 0.5);
-
-        data[i][color] = c.toString();
-        data[i]['magScale'] = magScale(m)*2;
-    }
-
-    return data;
-};
+})();
