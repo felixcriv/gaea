@@ -30,8 +30,6 @@ app.get('/events/:days?', function(req, res) {
     });
 
 
-
-
     var config = {
         timeout: 5000,
         daysToRequest : req.params.days || 1,
