@@ -83,6 +83,7 @@ var e = (function() {
 
         var hour = obj[i18n([cfg.language, "data", "hora"])];
         var date = obj[i18n([cfg.language, "data", "fecha"])];
+        moment.locale(cfg.language);
 
         var eventTime = moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A');
 
