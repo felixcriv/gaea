@@ -7,7 +7,8 @@
     "node": "0.10.x"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node_modules/.bin/mocha --reporter list"
   },
   "author": "Felix Guerrero <felixcriv@gmail.com>",
   "license": "ISC",
@@ -19,5 +20,9 @@
     "moment-timezone": "0.3.1",
     "q": "1.1.2",
     "request": "2.53.0"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "mocha": "^2.2.4"
   }
 }
