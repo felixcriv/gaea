@@ -1,16 +1,45 @@
 'use strict';
 
 var assert = require("assert");
-var Color = require('./../colors');
+var Color = require(__dirname + '/../colors');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
+var lang = require(__dirname + '/../lang');
 
 describe('Color', function() {
     var _color;
+    var _i18nColor;
+    var _i18nMagnitude;
+    var _hexColor;
+    var _magScale;
 
-    beforeEach(function() {
+    var testConfig = {
+        _language: 'en-US',
+        _data: [{magnitude: 'M2.7'}, 
+                {magnitude: 'M4.5'}, 
+                {magnitude: 'M1.3'}, 
+                {magnitude: 'M3.5'}, 
+                {magnitude: 'M1.0'}
+                ],
+
+        _i18n: function i18n() {
+            return new lang().i18n([].slice.call(arguments));
+        }
+
+    };
+
+    before(function() {
         _color = new Color();
+        _i18nColor = testConfig._i18n([testConfig._language, "data", "color"]);
+        _i18nMagnitude = testConfig._i18n([testConfig._language, "data", "magnitud"]);
+        _magScale = _color.calcMagScale(testConfig._data, _i18nMagnitude);
 
+    });
+
+    describe('_color', function(){
+        it('should create an instance of Color', function(){
+            assert.instanceOf(_color, Color, '_color is an instance of Color');
+        });
     });
 
     describe('#getColorForEvent()', function() {
@@ -25,32 +54,47 @@ describe('Color', function() {
 
         });
 
-        it('should return an Object when completed arguments are passed', function() {
-            assert.typeOf(_color.getColorForEvent({}, 3, 2), 'object');
+        it('should return an Array when completed arguments are passed', function() {
+            assert.typeOf(_color.getColorForEvent(testConfig._data, _i18nColor, _i18nMagnitude), 'array');
 
         });
     });
 
-    describe('#calHUE()', function() {
+    describe('#hueColor()', function() {
 
-        it('should return #ff1700 for magnitude 2.7', function() {
-            assert.equal('#ff1700', _color.calcHUE(2.7).toString());
+        it('should return #ff5a00 for magnitude 2.7', function() {
+            assert.equal('#ff5a00', _color.hueColor(_magScale(2.7)));
         });
 
-        it('should return #ff1500 for magnitude 2.5', function() {
-            assert.equal('#ff1500', _color.calcHUE(2.5).toString());
+        it('should return #ff6900 for magnitude 2.5', function() {
+            assert.equal('#ff6900', _color.hueColor(_magScale(2.5)));
         });
 
-        it('should return #ff1c00 for magnitude 3.3', function() {
-            assert.equal('#ff1c00', _color.calcHUE(3.3).toString());
+        it('should return #ff3f00 for magnitude 3.3', function() {
+            assert.equal('#ff3f00', _color.hueColor(_magScale(3.3)));
         });
-
-        it('should return "null" if magnitude is an string', function() {
-            assert.equal('null', _color.calcHUE('as3').toString());
-        });
-
-
 
     });
 
+
+    describe('#maxMag()', function() {
+
+        it('should return 4.5 as the Maximun magnitude value', function() {
+            assert.equal(4.5, _color.maxMag(testConfig._data, _i18nMagnitude));
+        });
+    });
+
+
+    describe("#minMag()", function(){
+        it('should return 1.3 as the Minimun magnitude value', function() {
+            assert.equal(1.0, _color.minMag(testConfig._data, _i18nMagnitude));
+        });
+    });
+
+
+    describe("#calcMagScale()", function() {
+        it('should return a function', function() {
+            assert.isFunction(_color.calcMagScale(testConfig._data, _i18nMagnitude));
+        });
+    });
 });
