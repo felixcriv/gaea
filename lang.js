@@ -6,6 +6,7 @@
 
         var Translate = function() {};
 
+
         var lang = {
 
             "en-US": {
@@ -66,14 +67,28 @@
 
         };
 
-        Translate.prototype.i18n = function i18n(keys) {
-            var obj = Object.create(lang);
-            for (var i in keys[0]) {
-                obj = obj[keys[0][i]];
-            }
-            return obj
 
-        }
+        Translate.prototype.i18n = function i18n(keys) {
+            var obj = [];
+            keys.shift().forEach(function(val, idx) {
+
+                if (val in lang) {
+                    obj = (lang[val])
+                } else {
+                    try {
+                        obj = obj[val];
+                    } catch (err) {
+                        obj = null;
+                    }
+                }
+            });
+            return obj;
+        };
+
+        Translate.prototype.getAvailableLanguages = function getAvailableLanguages() {
+            return Object.keys(lang);
+        };
+
         return Translate;
     })();
 
