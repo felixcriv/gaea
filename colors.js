@@ -10,7 +10,7 @@ var d3 = require('d3');
         var colorScale = d3.scale.linear();
         colorScale.domain([2, 10]);
         colorScale.range(["green", "red"]); // green to red (deepest)
-        //colorScale.clamp(true);
+        colorScale.clamp(true);
 
         var magScale = d3.scale.log();
         magScale.base(10);
