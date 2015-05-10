@@ -70,10 +70,10 @@
 
         Translate.prototype.i18n = function i18n(keys) {
             var obj = [];
-            keys.shift().forEach(function(val, idx) {
 
+            keys.forEach(function(val, idx) {
                 if (val in lang) {
-                    obj = (lang[val])
+                    obj = lang[val];
                 } else {
                     try {
                         obj = obj[val];
@@ -82,6 +82,7 @@
                     }
                 }
             });
+            
             return obj;
         };
 
