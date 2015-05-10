@@ -11,26 +11,17 @@ var Q = require('q'),
     tools = require('./tools'),
     lang = require('./lang'),
     moment = require('moment-timezone'),
+    config = require('./config'),
     colors = require('./colors');
 
 
 var e = (function() {
 
-
-    var options = {
-        server: "http://www.funvisis.gob.ve",
-        recent_events: '/sis_reciente.php',
-        post_data: {
-            "xjxfun": "actualizar",
-            "xjxr": new Date().getTime()
-        }
-    };
-
     //returns a document HTML
     function getHTML() {
         return Q.nfcall(request,
-            options.server + options.recent_events, {
-                form: options.post_data
+            config.options.server + config.options.recent_events, {
+                form: config.options.post_data
             }
         ).fail(function(err) {
             console.error(err)
@@ -79,19 +70,7 @@ var e = (function() {
         return p.join(" ");
     }
 
-    function calculateTimeDiff(obj, cfg){
-
-        var hour = obj[i18n([cfg.language, "data", "hora"])];
-        var date = obj[i18n([cfg.language, "data", "fecha"])];
-        moment.locale(cfg.language);
-
-        var eventTime = moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A');
-
-        obj[i18n([cfg.language,'data', 'ocurrido'])] = eventTime.startOf('hour').fromNow();
-
-        return obj;
-
-    }
+    
 
     //Returns events for event < currentDate
     function filterEvents(eventsObj, cfg) {
@@ -169,7 +148,7 @@ var e = (function() {
 
                             img = $(value).find('a').attr('href');
                             
-                            reportImage = (options.server + '/' + img);
+                            reportImage = (config.options.server + '/' + img);
                             
 
                             if(img != undefined){
@@ -192,7 +171,7 @@ var e = (function() {
                             }
                         });
 
-                        if (!tools.isEmptyObject(obj)) events.push(calculateTimeDiff(obj, cfg));
+                        if (!tools.isEmptyObject(obj)) events.push(tools.calculateTimeDiff(obj, cfg));
 
                     });
 
