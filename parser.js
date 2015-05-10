@@ -64,7 +64,7 @@ var e = (function() {
     }
 
     function i18n() {
-        return new lang().i18n([].slice.call(arguments));
+        return new lang().i18n([].slice.call(arguments)[0]);
     }
 
 
