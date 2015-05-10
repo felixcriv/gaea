@@ -1,6 +1,5 @@
 'use strict';
 
-var assert = require("assert");
 var Color = require(__dirname + '/../colors');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
