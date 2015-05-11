@@ -1,9 +1,7 @@
-'use strict';
-
-
-var d3 = require('d3');
-
 (function() {
+
+    'use strict';
+    var d3 = require('d3');
 
     var Colors = (function() {
 
@@ -38,7 +36,7 @@ var d3 = require('d3');
 
             if (typeof m != 'number')
                 return 'null'
-            var hue =  d3.rgb(colorScale(m)).brighter(2.091).hsl().toString();
+            var hue = d3.rgb(colorScale(m)).brighter(2.091).hsl().toString();
             return hue;
         };
 
@@ -72,7 +70,7 @@ var d3 = require('d3');
                     data[i][color] = this.hueColor(Math.round(magS(m), 2));
                     //magnitude scale is calculated based on the average of mix and Max magnitudes
                     //for the time period requested
-                    data[i]['magScale'] = Math.round(magS(m),2);
+                    data[i]['magScale'] = Math.round(magS(m), 2);
                 }
 
                 return data;

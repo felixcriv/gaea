@@ -1,10 +1,7 @@
-'use strict';
-
-var moment = require('moment-timezone');
-var lang = require('./lang');
-
-
 (function() {
+    'use strict';
+    var moment = require('moment-timezone');
+    var lang = require('./lang');
 
     var Tools = (function() {
 

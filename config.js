@@ -1,7 +1,5 @@
-'use strict';
-
-
 (function() {
+    'use strict';
 
     var Config = (function() {
 
@@ -23,9 +21,9 @@
         return Config;
     })();
 
-    if(typeof module != 'undefined' && module.exports != 'undefined'){
-    	module.exports = new Config();
-    }else{
-    	window.Config = new Config();
+    if (typeof module != 'undefined' && module.exports != 'undefined') {
+        module.exports = new Config();
+    } else {
+        window.Config = new Config();
     }
 })();

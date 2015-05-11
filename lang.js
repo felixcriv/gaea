@@ -1,6 +1,5 @@
-'use strict';
-
 (function() {
+    'use strict';
 
     var Translate = (function() {
 
@@ -82,7 +81,7 @@
                     }
                 }
             });
-            
+
             return obj;
         };
 
