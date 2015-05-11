@@ -1,4 +1,5 @@
 (function() {
+    /*jslint node: true */
 
     'use strict';
     var d3 = require('d3');
@@ -7,7 +8,7 @@
 
         var colorScale = d3.scale.linear();
         colorScale.domain([2, 10]);
-        colorScale.range(["green", "red"]); // green to red (deepest)
+        colorScale.range(['green', 'red']); // green to red (deepest)
         colorScale.clamp(true);
 
         var magScale = d3.scale.log();
@@ -35,7 +36,7 @@
         Colors.prototype.hueColor = function calcHUE(m) {
 
             if (typeof m != 'number')
-                return 'null'
+                return 'null';
             var hue = d3.rgb(colorScale(m)).brighter(2.091).hsl().toString();
             return hue;
         };
@@ -49,9 +50,9 @@
 
         Colors.prototype.getColorForEvent = function getColorForEvent() {
             if (!arguments.length || arguments.length < 3) {
-                return null
+                return null;
             } else {
-                var data = arguments[0]
+                var data = arguments[0];
                 var color = arguments[1];
                 var mag = arguments[2];
 
@@ -70,7 +71,7 @@
                     data[i][color] = this.hueColor(Math.round(magS(m), 2));
                     //magnitude scale is calculated based on the average of mix and Max magnitudes
                     //for the time period requested
-                    data[i]['magScale'] = Math.round(magS(m), 2);
+                    data[i].magScale = Math.round(magS(m), 2);
                 }
 
                 return data;

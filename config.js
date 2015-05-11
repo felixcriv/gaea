@@ -1,4 +1,5 @@
 (function() {
+    /*jslint node: true */
     'use strict';
 
     var Config = (function() {
@@ -9,13 +10,13 @@
         Config.prototype.options = (function options() {
 
             return {
-                server: "http://www.funvisis.gob.ve",
+                server: 'http://www.funvisis.gob.ve',
                 recent_events: '/sis_reciente.php',
                 post_data: {
-                    "xjxfun": "actualizar",
-                    "xjxr": new Date().getTime()
+                    'xjxfun': 'actualizar',
+                    'xjxr': new Date().getTime()
                 }
-            }
+            };
         })();
 
         return Config;

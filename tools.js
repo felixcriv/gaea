@@ -1,14 +1,15 @@
 (function() {
+    /*jslint node: true */
     'use strict';
     var moment = require('moment-timezone');
-    var lang = require('./lang');
+    var Lang = require('./lang');
 
     var Tools = (function() {
 
         var Tools = function() {};
 
         function i18n() {
-            return new lang().i18n([].slice.call(arguments)[0]);
+            return new Lang().i18n([].slice.call(arguments)[0]);
         }
 
         Tools.prototype.isEmptyObject = function isEmptyObject(obj) {
@@ -18,15 +19,15 @@
 
         Tools.prototype.isActualEvent = function isActualEvent(date, hour, days) {
             //Events are generated on VET timezone
-            var timeDiff = moment().tz('America/Caracas').diff(moment(date + ' ' + hour, "MM-DD-YYYY hh:mm A"), 'days');
+            var timeDiff = moment().tz('America/Caracas').diff(moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A'), 'days');
             //we only take events for the past n days
-            return (timeDiff == 0 || timeDiff < days) ? true : false;
+            return (timeDiff === 0 || timeDiff < days) ? true : false;
         };
 
         Tools.prototype.calculateTimeDiff = function calculateTimeDiff(obj, cfg) {
 
-            var hour = obj[i18n([cfg.language, "data", "hora"])];
-            var date = obj[i18n([cfg.language, "data", "fecha"])];
+            var hour = obj[i18n([cfg.language, 'data', 'hora'])];
+            var date = obj[i18n([cfg.language, 'data', 'fecha'])];
             moment.locale(cfg.language);
 
             var eventTime = moment(date + ' ' + hour, 'MM-DD-YYYY hh:mm A');
