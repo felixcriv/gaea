@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert;
 var expect = require('chai').expect;
-var lang = require(__dirname + '/../lang');
+var lang = require(__dirname + '/../src/lang');
 
 
 describe('i18n', function() {

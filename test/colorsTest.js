@@ -1,9 +1,9 @@
 'use strict';
 
-var Color = require(__dirname + '/../colors');
+var Color = require(__dirname + '/../src/colors');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
-var lang = require(__dirname + '/../lang');
+var lang = require(__dirname + '/../src/lang');
 
 describe('Color', function() {
     var _color;

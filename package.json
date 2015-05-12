@@ -6,10 +6,13 @@
   "engines": {
     "node": "0.10.x"
   },
+
   "scripts": {
     "start": "node server.js",
+    "pretest": "node_modules/.bin/jshint src",
     "test": "node_modules/.bin/mocha --reporter list"
   },
+
   "author": "Felix Guerrero <felixcriv@gmail.com>",
   "license": "ISC",
   "dependencies": {
@@ -23,6 +26,7 @@
   },
   "devDependencies": {
     "chai": "^2.3.0",
+    "jshint": "^2.7.0",
     "mocha": "^2.2.4"
   }
 }
