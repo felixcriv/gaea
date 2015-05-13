@@ -2,12 +2,9 @@
     /*jslint node: true */
     'use strict';
 
-    var Translate = (function() {
+    var Translate = {
 
-        var Translate = function() {};
-
-
-        var lang = {
+        lang: {
 
             'en-US': {
 
@@ -65,36 +62,37 @@
                 }
             }
 
-        };
+        },
 
+        i18n: function i18n() {
+            var self = this;
 
-        Translate.prototype.i18n = function i18n(keys) {
-            var obj = [];
+            return function(keys) {
+                var obj = [];
 
-            keys.forEach(function(val) {
-                if (val in lang) {
-                    obj = lang[val];
-                } else {
-                    try {
-                        obj = obj[val];
-                    } catch (err) {
-                        obj = null;
+                keys.forEach(function(val) {
+                    if (val in self.lang) {
+                        obj = self.lang[val];
+                    } else {
+                        try {
+                            obj = obj[val];
+                        } catch (err) {
+                            obj = null;
+                        }
                     }
-                }
-            });
+                });
 
-            return obj;
-        };
+                return obj;
+            };
+        },
 
-        Translate.prototype.getAvailableLanguages = function getAvailableLanguages() {
-            return Object.keys(lang);
-        };
-
-        return Translate;
-    })();
+        getAvailableLanguages: function getAvailableLanguages() {
+            return Object.keys(this.lang);
+        }
+    };
 
     if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-        module.exports = Translate;
+        module.exports = Object.create(Translate);
     else
-        window.Translate = Translate;
+        window.Translate = Object.create(Translate);
 })();
