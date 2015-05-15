@@ -13,7 +13,7 @@
                     'xjxfun': 'actualizar',
                     'xjxr': new Date().getTime()
                 }
-            }
+            };
         })()
     };
 
