@@ -37,13 +37,14 @@
          language: req.query.l || 'en-US'
      };
 
-     parserProxy.getEvents(config).then(
+    parserProxy.getEvents(config).then(
          function(data) {
              res.json(data);
          },
          function(error) {
              res.send(error);
          });
+
  });
 
  app.use('/', express.static(__dirname)).listen(app.get('port'));

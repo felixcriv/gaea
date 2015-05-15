@@ -3,24 +3,25 @@
     'use strict';
 
     var Parser = require('./parser');
+    var Translate = require('./lang');
     var Q = require('q');
 
-    var ParserProxy = (function() {
+    var ParserProxy = {
 
-        var ParserProxy = function() {};
-
-        ParserProxy.prototype.getEvents = function getEvents(cfg) {
+        getEvents: function getEvents(cfg) {
             try {
-                if (Parser.i18n([cfg.language, 'data', 'report'])) {
+                if (Translate.i18n()([cfg.language, 'data', 'report'])) {
+
                     return Parser.getHTML().then(function(response) {
-                        return response[0].body;
-                    }).then(function(body) {
-                        return Parser.parseHTML(body, cfg);
-                    }).then(function(data) {
-                        return Parser.filterEvents(data, cfg);
-                    }).then(function(data) {
-                        return Parser.applyMagnitudColorForEvents(data, cfg);
-                    });
+                            return response[0].body;
+                        })
+                        .then(function(body) {
+                            return Parser.parseHTML(body, cfg);
+                        }).then(function(data) {
+                            return Parser.filterEvents(data, cfg);
+                        }).then(function(data) {
+                            return Parser.applyMagnitudColorForEvents(data, cfg);
+                        });
                 } else {
                     return Q.reject({
                         API_error: 'Language not defined'
@@ -28,18 +29,16 @@
                 }
             } catch (error) {
                 return Q.reject({
-                    Error: error
+                    Error: error.toString()
                 });
             }
-        };
+        }
 
-        return ParserProxy;
-
-    })();
+    };
 
     if (typeof module !== 'undefined' && module.exports !== 'undefined')
-        module.exports = new ParserProxy();
+        module.exports = Object.create(ParserProxy);
     else
-        window.ParserProxy = new ParserProxy();
+        window.ParserProxy = Object.create(ParserProxy);
 
 })();

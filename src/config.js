@@ -2,12 +2,9 @@
     /*jslint node: true */
     'use strict';
 
-    var Config = (function() {
+    var Config = {
 
-        var Config = function() {};
-
-
-        Config.prototype.options = (function options() {
+        options: (function options() {
 
             return {
                 server: 'http://www.funvisis.gob.ve',
@@ -16,15 +13,13 @@
                     'xjxfun': 'actualizar',
                     'xjxr': new Date().getTime()
                 }
-            };
-        })();
-
-        return Config;
-    })();
+            }
+        })()
+    };
 
     if (typeof module != 'undefined' && module.exports != 'undefined') {
-        module.exports = new Config();
+        module.exports = Object.create(Config);
     } else {
-        window.Config = new Config();
+        window.Config = Object.create(Config);
     }
 })();

@@ -3,7 +3,7 @@
 var Color = require(__dirname + '/../src/colors');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
-var lang = require(__dirname + '/../src/lang');
+var Lang = require(__dirname + '/../src/lang');
 
 describe('Color', function() {
     var _color;
@@ -22,13 +22,13 @@ describe('Color', function() {
                 ],
 
         _i18n: function i18n() {
-            return new lang().i18n([].slice.call(arguments)[0]);
+            return Lang.i18n()([].slice.call(arguments)[0]);
         }
 
     };
 
     before(function() {
-        _color = new Color();
+        _color = Color;
         _i18nColor = testConfig._i18n([testConfig._language, "data", "color"]);
         _i18nMagnitude = testConfig._i18n([testConfig._language, "data", "magnitud"]);
         _magScale = _color.calcMagScale(testConfig._data, _i18nMagnitude);
@@ -36,8 +36,8 @@ describe('Color', function() {
     });
 
     describe('_color', function(){
-        it('should create an instance of Color', function(){
-            assert.instanceOf(_color, Color, '_color is an instance of Color');
+        it('should create an object of Color', function(){
+            assert.isObject(_color, Color, '_color is an object');
         });
     });
 

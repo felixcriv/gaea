@@ -2,6 +2,8 @@
     /*jslint node: true */
     'use strict';
 
+    //var Tools = require('./tools');
+
     var Translate = {
 
         lang: {
@@ -65,10 +67,11 @@
         },
 
         i18n: function i18n() {
+
             var self = this;
+            var obj = [];
 
             return function(keys) {
-                var obj = [];
 
                 keys.forEach(function(val) {
                     if (val in self.lang) {

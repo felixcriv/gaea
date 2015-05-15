@@ -10,7 +10,7 @@
         request = require('request'),
         jsdom = require('jsdom'),
         tools = require('./tools'),
-        Lang = require('./lang'),
+        Translate = require('./lang'),
         moment = require('moment-timezone'),
         config = require('./config'),
         Colors = require('./colors');
@@ -51,71 +51,65 @@
         return p.join(' ');
     };
 
-    var Parser = (function() {
 
-        var Parser = function() {};
-
-        Parser.prototype.i18n = function i18n() {
-            return new Lang().i18n([].slice.call(arguments)[0]);
-        };
+    var Parser = {
 
         //returns a document HTML
-        Parser.prototype.getHTML = function getHTML() {
+        getHTML: function getHTML() {
+
             return Q.nfcall(request,
                 config.options.server + config.options.recent_events, {
                     form: config.options.post_data
                 }
             ).fail(function(err) {
-                console.error(err);
                 return err;
             });
-        };
+        },
 
 
         //Returns events for event < currentDate
-        Parser.prototype.filterEvents = function filterEvents(eventsObj, cfg) {
+        filterEvents: function filterEvents(eventsObj, cfg) {
 
             var e = Object.create(null);
             var events = [];
 
             eventsObj.forEach(function(obj) {
 
-                var date = obj[this.i18n([cfg.language, 'data', 'fecha'])];
-                var hour = obj[this.i18n([cfg.language, 'data', 'hora'])];
-                var location = this.i18n([cfg.language, 'data', 'localizacion']);
+                var date = obj[Translate.i18n()([cfg.language, 'data', 'fecha'])];
+                var hour = obj[Translate.i18n()([cfg.language, 'data', 'hora'])];
+                var location = Translate.i18n()([cfg.language, 'data', 'localizacion']);
 
                 var l = obj[location].split(' ');
 
                 if (!tools.isEmptyObject(obj) && tools.isActualEvent(date, hour, cfg.daysToRequest)) {
 
-                    var sentence_preposition = this.i18n([cfg.language, 'data', 'de']);
-                    var place = this.i18n([cfg.language, 'coordinates', l[3]]);
-                    var magnitude = this.i18n([cfg.language, 'data', 'magnitud']);
+                    var sentence_preposition = Translate.i18n()([cfg.language, 'data', 'de']);
+                    var place = Translate.i18n()([cfg.language, 'coordinates', l[3]]);
+                    var magnitude = Translate.i18n()([cfg.language, 'data', 'magnitud']);
 
                     obj[magnitude] = 'M' + obj[magnitude];
                     obj[location] = l[0] + l[1] + ' ' + place + ' ' + sentence_preposition + ' ' + createPlaceName(l);
 
                     events.push(obj);
                 }
-            }.bind(Parser.prototype));
+            });
 
             e.events = events;
 
             return e.events;
-        };
+        },
 
         //Returns a color string for all the events
-        Parser.prototype.applyMagnitudColorForEvents = function applyMagnitudColorForEvents(objEvents, cfg) {
+        applyMagnitudColorForEvents: function applyMagnitudColorForEvents(objEvents, cfg) {
 
-            var c = this.i18n([cfg.language, 'data', 'color']);
-            var m = this.i18n([cfg.language, 'data', 'magnitud']);
-
-            return new Colors().getColorForEvent(objEvents, c, m);
-        }.bind(Parser.prototype);
+            var c = Translate.i18n()([cfg.language, 'data', 'color']);
+            var m = Translate.i18n()([cfg.language, 'data', 'magnitud']);
+            return Colors.getColorForEvent(objEvents, c, m);
+        },
 
         //returns a promise that if it is resolved 
         //populates an object with the event properties/values
-        Parser.prototype.parseHTML = function parseHTML(body, cfg) {
+        parseHTML: function parseHTML(body, cfg) {
 
             cfg.timeout = cfg.timeout || 5000;
 
@@ -158,21 +152,21 @@
                                     imageUrl = reportImage;
                                 }
 
-                                obj[this.i18n([cfg.language, 'data', 'report'])] = imageUrl || imagePlaceholder;
+                                obj[Translate.i18n()([cfg.language, 'data', 'report'])] = imageUrl || imagePlaceholder;
 
                                 //columns
                                 if (index < 7) {
                                     var prop = evntProp[index];
 
                                     if (prop === 'fecha') {
-                                        obj[this.i18n([cfg.language, 'data', prop])] = moment($(value).text(), 'DD-MM-YYYY').format('MM/DD/YYYY');
+                                        obj[Translate.i18n()([cfg.language, 'data', prop])] = moment($(value).text(), 'DD-MM-YYYY').format('MM/DD/YYYY');
                                     } else if (evntProp[index] === 'hora') {
-                                        obj[this.i18n([cfg.language, 'data', prop])] = moment($(value).text(), 'HH:mm').format('hh:mm A');
+                                        obj[Translate.i18n()([cfg.language, 'data', prop])] = moment($(value).text(), 'HH:mm').format('hh:mm A');
                                     } else {
-                                        obj[this.i18n([cfg.language, 'data', prop])] = $(value).text();
+                                        obj[Translate.i18n()([cfg.language, 'data', prop])] = $(value).text();
                                     }
                                 }
-                            }.bind(Parser.prototype));
+                            });
 
                             if (!tools.isEmptyObject(obj)) events.push(tools.calculateTimeDiff(obj, cfg));
 
@@ -185,17 +179,14 @@
             if (cfg.timeout) setTimeout(_r.reject, cfg.timeout);
 
             return _r.promise;
-        };
+        }
 
-
-        return Parser;
-
-    })();
+    };
 
 
     if (typeof module !== 'undefined' && module.exports !== undefined)
-        module.exports = new Parser();
+        module.exports = Object.create(Parser);
     else
-        window.Parser = new Parser();
+        window.Parser = Object.create(Parser);
 
 })();
